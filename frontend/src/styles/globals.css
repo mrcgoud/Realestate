@@ -1,0 +1,289 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.6%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.6%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.6%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 84.3% 60.2%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.3% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.6%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 3.6%;
+    --foreground: 0 0% 98.2%;
+    --card: 0 0% 3.6%;
+    --card-foreground: 0 0% 98.2%;
+    --popover: 0 0% 3.6%;
+    --popover-foreground: 0 0% 98.2%;
+    --muted: 0 0% 14.3%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 84.3% 60.2%;
+    --accent-foreground: 0 0% 3.6%;
+    --destructive: 0 84.3% 60.2%;
+    --destructive-foreground: 0 0% 3.6%;
+    --border: 0 0% 14.3%;
+    --input: 0 0% 14.3%;
+    --ring: 0 0% 83.3%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-primary-foreground hover:bg-primary/90;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary text-secondary-foreground hover:bg-secondary/90;
+  }
+
+  .btn-outline {
+    @apply btn border border-input bg-background hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .card {
+    @apply rounded-lg border border-border bg-card text-card-foreground shadow-sm;
+  }
+
+  .card-header {
+    @apply flex flex-col space-y-1.5 p-6;
+  }
+
+  .card-title {
+    @apply text-2xl font-semibold leading-none tracking-tight;
+  }
+
+  .card-description {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .card-content {
+    @apply p-6 pt-0;
+  }
+
+  .card-footer {
+    @apply flex items-center p-6 pt-0;
+  }
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground rounded-full hover:bg-foreground;
+}
+
+/* Loading animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Responsive typography */
+@layer components {
+  .h1 {
+    @apply text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl;
+  }
+
+  .h2 {
+    @apply text-3xl font-bold tracking-tight md:text-4xl;
+  }
+
+  .h3 {
+    @apply text-2xl font-bold tracking-tight md:text-3xl;
+  }
+
+  .h4 {
+    @apply text-xl font-bold tracking-tight;
+  }
+
+  .p {
+    @apply text-base leading-relaxed;
+  }
+
+  .p-small {
+    @apply text-sm leading-relaxed;
+  }
+}
+
+/* Mobile-specific optimizations */
+@layer components {
+  /* Touch targets - WCAG AA compliant minimum 44px */
+  @media (max-width: 768px) {
+    .btn {
+      @apply min-h-[44px] px-4;
+    }
+
+    .touch-target {
+      @apply min-w-[44px] min-h-[44px];
+    }
+
+    /* Comfortable touch targets */
+    .comfortable-touch {
+      @apply min-w-[48px] min-h-[48px];
+    }
+
+    /* Mobile-optimized cards */
+    .card {
+      @apply mx-2 mb-4;
+    }
+
+    /* Mobile typography adjustments */
+    .h1 {
+      @apply text-3xl md:text-4xl lg:text-5xl;
+    }
+
+    .h2 {
+      @apply text-2xl md:text-3xl;
+    }
+
+    .h3 {
+      @apply text-xl md:text-2xl;
+    }
+
+    .h4 {
+      @apply text-lg md:text-xl;
+    }
+
+    .p {
+      @apply text-sm leading-relaxed md:text-base;
+    }
+
+    /* Mobile map optimizations */
+    .map-container {
+      will-change: transform;
+      contain: layout style paint;
+    }
+
+    /* Mobile property cards */
+    .property-card {
+      contain: layout style paint;
+    }
+
+    /* Bottom sheet optimizations */
+    .bottom-sheet {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    /* Mobile gesture handling */
+    .gesture-surface {
+      touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* Mobile navigation */
+    .mobile-nav {
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+
+    /* Mobile modal optimizations */
+    .mobile-modal {
+      max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      margin-top: env(safe-area-inset-top);
+      margin-bottom: env(safe-area-inset-bottom);
+    }
+  }
+
+  /* Performance optimizations for mobile */
+  @media (max-width: 768px) {
+    /* Reduce animations on low-end devices */
+    @media (prefers-reduced-motion: no-preference) {
+      .animate-on-scroll {
+        animation: none;
+      }
+    }
+
+    /* Optimize transforms */
+    .transform-gpu {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+    }
+
+    /* Lazy loading placeholders */
+    .lazy-image {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+  }
+
+  /* High contrast mode for accessibility */
+  @media (prefers-contrast: high) {
+    .btn-primary {
+      @apply border-2 border-current;
+    }
+
+    .card {
+      @apply border-2;
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-on-scroll,
+    .shimmer,
+    .hover\\:scale-105 {
+      animation: none;
+      transform: none;
+    }
+  }
+}
