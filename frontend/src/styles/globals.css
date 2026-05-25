@@ -43,7 +43,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    /* border color applied where needed */
   }
 
   body {
