@@ -47,7 +47,8 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
   }
 }
 
@@ -96,6 +97,27 @@
     @apply flex items-center p-6 pt-0;
   }
 }
+
+/* Map CSS variables to utility class names used throughout the app */
+@layer utilities {
+  .bg-background { background-color: rgb(var(--background)); }
+  .text-foreground { color: rgb(var(--foreground)); }
+
+  .bg-card { background-color: rgb(var(--card)); }
+  .text-card-foreground { color: rgb(var(--card-foreground)); }
+
+  .border-border { border-color: rgb(var(--border)); }
+  .border-input { border-color: rgb(var(--input)); }
+
+  .bg-primary { background-color: rgb(var(--accent)); }
+  .text-primary-foreground { color: rgb(var(--accent-foreground)); }
+
+  .bg-secondary { background-color: rgb(var(--muted)); }
+  .text-secondary-foreground { color: rgb(var(--muted-foreground)); }
+
+  .ring-ring { box-shadow: 0 0 0 3px rgb(var(--ring) / 0.2); }
+}
+
 
 /* Custom scrollbar styling */
 ::-webkit-scrollbar {
