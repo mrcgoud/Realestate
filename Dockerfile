@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install dependencies for frontend
 COPY frontend/package*.json ./frontend/
-RUN npm --prefix frontend ci
+RUN npm --prefix frontend install --legacy-peer-deps --no-audit --no-fund
 
 # Copy frontend source and build
 COPY frontend ./frontend
@@ -16,7 +16,7 @@ WORKDIR /app
 
 # Install production deps for frontend
 COPY frontend/package*.json ./frontend/
-RUN npm --prefix frontend ci --only=production
+RUN npm --prefix frontend install --omit=dev --no-audit --no-fund
 
 # Copy built output from builder
 COPY --from=builder /app/frontend/.next ./frontend/.next
