@@ -62,15 +62,27 @@
   }
 
   .btn-primary {
-    @apply btn bg-primary text-primary-foreground hover:bg-primary/90;
+    @apply btn bg-primary text-primary-foreground;
+  }
+
+  .btn-primary:hover {
+    filter: brightness(0.9);
   }
 
   .btn-secondary {
-    @apply btn bg-secondary text-secondary-foreground hover:bg-secondary/90;
+    @apply btn bg-secondary text-secondary-foreground;
+  }
+
+  .btn-secondary:hover {
+    filter: brightness(0.9);
   }
 
   .btn-outline {
-    @apply btn border border-input bg-background hover:bg-accent hover:text-accent-foreground;
+    @apply btn border border-input bg-background;
+  }
+
+  .btn-outline:hover {
+    @apply bg-accent text-accent-foreground;
   }
 
   .card {
@@ -129,7 +141,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground rounded-full hover:bg-foreground;
+  @apply bg-muted-foreground rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  filter: brightness(0.9);
 }
 
 /* Loading animation */
