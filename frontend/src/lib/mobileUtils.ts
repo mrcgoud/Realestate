@@ -121,6 +121,53 @@ export const formatBytes = (bytes: number, decimals = 2): string => {
   return Math.round((bytes / Math.pow(k, i)) * Math.pow(10, dm)) / Math.pow(10, dm) + ' ' + sizes[i];
 };
 
+/**
+ * Recommended touch target size (px) for interactive elements
+ */
+export const getTouchTargetSize = (): number => {
+  if (typeof window === 'undefined') return 48
+  return isMobileViewport() ? 56 : 44
+}
+
+/**
+ * Trigger lightweight haptic feedback where supported
+ */
+export const triggerHapticFeedback = (pattern: number | number[] = 20): void => {
+  if (typeof window === 'undefined') return
+  try {
+    if (navigator.vibrate) {
+      // @ts-ignore
+      navigator.vibrate(pattern)
+    }
+  } catch (e) {
+    // noop
+  }
+}
+
+/**
+ * Determine an optimal starting map zoom for mobile vs desktop
+ */
+export function getOptimalMapZoom(): number {
+  if (typeof window === 'undefined') return 12
+  const { width } = getViewportSize()
+  if (width < 480) return 11
+  if (width < 768) return 12
+  return 13
+}
+
+/**
+ * Basic feature-detect for WebGL support
+ */
+export function supportsWebGL(): boolean {
+  if (typeof window === 'undefined') return false
+  try {
+    const canvas = document.createElement('canvas')
+    return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+  } catch (e) {
+    return false
+  }
+}
+
 export default {
   isMobileDevice,
   getViewportSize,
@@ -131,5 +178,9 @@ export default {
   enableBodyScroll,
   prefersDarkMode,
   prefersReducedMotion,
+  getTouchTargetSize,
+  triggerHapticFeedback,
+  getOptimalMapZoom,
+  supportsWebGL,
   formatBytes,
 };

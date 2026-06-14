@@ -7,10 +7,14 @@ interface MapStore {
 
   // Layer visibility - objects for easier toggle tracking
   visibleLayers: Record<string, boolean>
-  layers: Map<string, MapLayerConfig>
+  // `layers` exposed to components as simple booleans (layers.<id>)
+  layers: Record<string, boolean>
+  // detailed layer configurations stored separately
+  layerConfigs: Map<string, MapLayerConfig>
 
   // Heatmap state
   heatmapType: 'price' | 'demand' | 'density'
+  heatmap: { enabled: boolean }
 
   // Isochrone state
   isochroneMode: boolean
@@ -19,11 +23,13 @@ interface MapStore {
   // Transit state
   transitType: 'all' | 'bus' | 'subway' | 'train'
   showTransitDistance: boolean
+  transit: { enabled: boolean }
 
   // Advanced Analytics state
   analyticsType: 'walkability' | 'pricePrediction' | 'marketTrends' | 'neighborhood'
   analyticsOpacity: number // 0-1
   showAnalyticsLabels: boolean
+  analytics: { enabled: boolean }
 
   // Amenities/Infrastructure
   selectedAmenities: string[]
@@ -95,6 +101,8 @@ interface MapStore {
   removeLayer: (layerId: string) => void
   setHeatmapType: (type: 'price' | 'demand' | 'density') => void
   toggleHeatmap: () => void
+  toggleAnalytics: () => void
+  toggleTransit: () => void
   setIsochrone: (enabled: boolean, time: number) => void
   toggleIsochrone: () => void
   toggleAmenities: () => void
@@ -184,15 +192,19 @@ const defaultViewport: ViewportState = {
 export const useMapStore = create<MapStore>((set, get) => ({
   viewport: defaultViewport,
   visibleLayers: { properties: true },
-  layers: new Map(),
+  layers: { properties: true },
+  layerConfigs: new Map(),
   heatmapType: 'price',
+  heatmap: { enabled: false },
   isochroneMode: false,
   isochroneTime: 30,
   transitType: 'all',
   showTransitDistance: true,
+  transit: { enabled: false },
   analyticsType: 'walkability',
   analyticsOpacity: 0.7,
   showAnalyticsLabels: true,
+  analytics: { enabled: false },
   selectedAmenities: [],
 
   // Enhanced Mobile defaults
@@ -252,17 +264,18 @@ export const useMapStore = create<MapStore>((set, get) => ({
 
   addLayer: (layer: MapLayerConfig) =>
     set((state) => {
-      const newLayers = new Map(state.layers)
-      newLayers.set(layer.id, layer)
-      return { layers: newLayers }
+      const configs = new Map(state.layerConfigs)
+      configs.set(layer.id, layer)
+      return { layerConfigs: configs, layers: { ...state.layers, [layer.id]: true } }
     }),
 
   removeLayer: (layerId: string) =>
     set((state) => {
-      const newLayers = new Map(state.layers)
-      newLayers.delete(layerId)
-      const { [layerId]: _, ...rest } = state.visibleLayers
-      return { layers: newLayers, visibleLayers: rest }
+      const configs = new Map(state.layerConfigs)
+      configs.delete(layerId)
+      const { [layerId]: _, ...restLayers } = state.layers
+      const { [layerId]: __, ...restVisible } = state.visibleLayers
+      return { layerConfigs: configs, layers: restLayers, visibleLayers: restVisible }
     }),
 
   setHeatmapType: (type: 'price' | 'demand' | 'density') =>
@@ -273,6 +286,25 @@ export const useMapStore = create<MapStore>((set, get) => ({
       visibleLayers: {
         ...state.visibleLayers,
         heatmap: !state.visibleLayers.heatmap,
+      },
+      heatmap: { enabled: !state.heatmap.enabled },
+    })),
+
+  toggleAnalytics: () =>
+    set((state) => ({
+      analytics: { enabled: !state.analytics.enabled },
+      visibleLayers: {
+        ...state.visibleLayers,
+        analytics: !state.visibleLayers.analytics,
+      },
+    })),
+
+  toggleTransit: () =>
+    set((state) => ({
+      transit: { enabled: !state.transit.enabled },
+      visibleLayers: {
+        ...state.visibleLayers,
+        transit: !state.visibleLayers.transit,
       },
     })),
 
@@ -317,15 +349,19 @@ export const useMapStore = create<MapStore>((set, get) => ({
   resetMap: () =>
     set({
       viewport: defaultViewport,
-      visibleLayers: { properties: true },
+      visibleLayers: { properties: true, heatmap: false, analytics: false, transit: false },
+      layers: { properties: true, heatmap: false, analytics: false, transit: false },
       heatmapType: 'price',
+      heatmap: { enabled: false },
       isochroneMode: false,
       isochroneTime: 30,
       transitType: 'all',
       showTransitDistance: true,
+      transit: { enabled: false },
       analyticsType: 'walkability',
       analyticsOpacity: 0.7,
       showAnalyticsLabels: true,
+      analytics: { enabled: false },
       selectedAmenities: [],
     }),
 
