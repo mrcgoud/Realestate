@@ -68,6 +68,9 @@ interface MapStore {
     area: number
   }
 
+  // Map instance (MapLibre) for advanced interactions
+  mapInstance: any | null
+
   // Biometric State
   biometricEnabled: boolean
   biometricCredentials: any[]
@@ -95,6 +98,7 @@ interface MapStore {
 
   // Actions
   setViewport: (viewport: Partial<ViewportState>) => void
+  setMapInstance: (instance: any | null) => void
   toggleLayer: (layerId: string) => void
   setLayerVisibility: (layerId: string, visible: boolean) => void
   addLayer: (layer: MapLayerConfig) => void
@@ -225,6 +229,7 @@ export const useMapStore = create<MapStore>((set, get) => ({
   arMode: false,
   arProperty: null,
   arMeasurements: { width: 0, height: 0, area: 0 },
+  mapInstance: null,
 
   biometricEnabled: false,
   biometricCredentials: [],
@@ -374,6 +379,8 @@ export const useMapStore = create<MapStore>((set, get) => ({
         zoom: Math.floor(Math.log2(360 / Math.max(maxLat - minLat, maxLon - minLon))),
       },
     }),
+
+  setMapInstance: (instance: any | null) => set({ mapInstance: instance }),
 
   // Mobile-specific actions
   setMobileMode: (isMobile: boolean) =>
